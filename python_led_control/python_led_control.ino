@@ -11,8 +11,8 @@ SerialTransfer myTransfer;
 
 //// PIN ASSIGNMENT: LEDs ////
 // output
-const int left_mouse_led_pin = 22; // LED control for mouse on left side
-const int right_mouse_led_pin = 23; // LED control for mouse on right side
+const int left_led_pin = 22; // LED control for mouse on left side
+const int right_led_pin = 23; // LED control for mouse on right side
 
 // Use a list to determine which animal is rearing
 // 0-th index = Left, 1st index = Right
@@ -47,23 +47,23 @@ void rearing_trigger() {
   if (myTransfer.available())
   {
     myTransfer.rxObj(trigger_list);
-    if (trigger_list == [1,0]) {
+    if ((trigger_list[0]== 1) && (trigger_list[1] == 0)) {
       Serial.println("L Rearing!");
       digitalWrite(left_led_pin, HIGH);
       digitalWrite(right_led_pin, LOW);
     }
-    else if (trigger_list == [0,1]) {
+    else if ((trigger_list[0] == 0) && (trigger_list[1] == 1)) {
       Serial.println("R Rearing!");
       digitalWrite(left_led_pin, LOW);
       digitalWrite(right_led_pin, HIGH);
     }
-    else if (trigger_list == [1,1]) {
+    else if ((trigger_list[0] == 1) && (trigger_list[1] == 1)) {
       Serial.println("Both Rearing!");
       digitalWrite(left_led_pin, HIGH);
       digitalWrite(right_led_pin, HIGH);
     }
     else {
-      Serial.println("Neihter Rearing!");
+      Serial.println("Neither Rearing!");
       digitalWrite(left_led_pin, LOW);
       digitalWrite(right_led_pin, LOW);
     }
@@ -71,6 +71,6 @@ void rearing_trigger() {
 }
 
 // loop
-void loop{
+void loop() {
   rearing_trigger();
 }
