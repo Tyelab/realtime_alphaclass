@@ -12,7 +12,9 @@ As of 4/30/21:
 
 Code is tested and functional for demonstration as of 5/5/21
 
-Standard computing environment for Anaconda should be made. Jeremy to export conda environment and upload here.
+~~Standard computing environment for Anaconda should be made. Jeremy to export conda environment and upload here.~~
+
+Conda environment uploaded 5/5/21. Use `arduino_python.yml`.
 
 Code must be integrated with a script running real time AlphaTracker.
 
