@@ -1,4 +1,4 @@
-# rearing_experiment
+# Realtime Arduino Behavior Classification
 ## Use case
 This is meant to control an Arduino using Python triggers for an experiment Aneesh Bal is going to run.
 A behavior box will be divided in the middle by a wall that will only allow the animals to rear so they can see one another.
