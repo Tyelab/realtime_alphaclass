@@ -10,9 +10,8 @@
 from pySerialTransfer import pySerialTransfer as txfer
 # Import sys for exiting program safely
 import sys
-# Import numpy random for generating random lists
-# Use default_rng per documentation
-from numpy.random import default_rng
+# Import random for generating random numbers
+from random import randint
 # import time for sleep given demo
 import time
 
@@ -20,14 +19,17 @@ import time
 # Main Function; can become function called during experiment
 # -----------------------------------------------------------------------------
 
-# Create a rearing list that's updated depending on animal behavior
-# 0-th index = L side, 1st index = R side
+# 4 behaviors are getting tracked: rearing, walking, sitting, grooming
 # Key:
-# [0,0] = neither rearing
-# [1,0] = left side rearing
-# [0,1] = right side rearing
-# [1,1] = both rearing
-rearing_list = [0,0]
+# 0 = Rearing
+# 1 = Walking
+# 2 = Sitting
+# 3 = Grooming
+behavior_dictionary = {
+    0 : "Rearing!", 1 : "Walking!",
+    2 : "Sitting!", 3 : "Grooming!"
+}
+
 
 if __name__ == '__main__':
     try:
@@ -40,24 +42,18 @@ if __name__ == '__main__':
         # Open the link
         link.open()
 
-        # While expeirment is running for the number of samples:
+        # While experiment is running for the number of samples:
         while True:
-            rng = default_rng()
-            rearing_value = rng.uniform(low=0, high=1, size=1)
-            print(rearing_value)
-            if rearing_value <= 0.50:
-                rearing_list = [0,1]
-            else:
-                rearing_list = [1,0]
-            time.sleep(.1)
-            # List for transmission is the rearing_list
-            list_ = rearing_list
+            behavior = randint(0,3)
+            print(behavior_dictionary[behavior])
+
+            time.sleep(1)
             # Create transmission object; size refers to packet size
-            list_size = link.tx_obj(list_)
+            behavior_size = link.tx_obj(behavior)
             # Send packet
-            link.send(list_size)
+            link.send(behavior_size)
             # Print what was sent to the Arduino
-            print("Sent:\t\t{}".format(list_))
+            print("Sent:\t\t{}".format(behavior))
 
             # Although the documentation/previous experience dictates to use
             # this while statement, including it doesn't allow for continous
@@ -65,13 +61,11 @@ if __name__ == '__main__':
             # For now, do NOT uncomment this statement
             # while not link.available():
             #     pass
-        link.close()
-        print("Done")
-        sys.exit()
 
     except KeyboardInterrupt:
         try:
             link.close()
+            print("Done")
             print("Exiting...")
             sys.exit()
         except:
