@@ -11,66 +11,78 @@ SerialTransfer myTransfer;
 
 //// PIN ASSIGNMENT: LEDs ////
 // output
-const int left_led_pin = 12; // LED control for mouse on left side
-const int right_led_pin = 8; // LED control for mouse on right side
+const int rearing_led_pin = 12; // LED control for rearing behavior
+const int walking_led_pin = 8; // LED control for walking behavior
+const int sitting_led_pin = 7; // LED control for sitting behavior
+const int grooming_led_pin = 4; // LED control for grooming behavior
 
-// Use a list to determine which animal is rearing
-// 0-th index = Left, 1st index = Right
-// Create the trigger_list with a size of 2 integers
-int32_t trigger_list[2];
+// Use a list to receive classified behavior
+// Create the trigger_value with a size of 1
+int32_t trigger_list[1];
 
 //// SETUP ////
 void setup() {
   // -- DEFINE BITRATE -- //
-  // Serial debugging on COM13, use Ctrl+Shift+M to open in Arduino IDE
   // If using pySerialTransfer on Arduino UNO, Serial cannot be monitored.
   // Serial transfer of data through USB connection
   // Arduino UNO has Serial ONLY
   Serial.begin(115200);
   myTransfer.begin(Serial, true);
 
-
   // -- DEFINE PIN MODES -- //
   // input, as in input to the Arduino from some kind of sensor
   // None
   // output
-  pinMode(left_led_pin, OUTPUT);
-  pinMode(right_led_pin, OUTPUT);
+  pinMode(rearing_led_pin, OUTPUT);
+  pinMode(walking_led_pin, OUTPUT);
+  pinMode(sitting_led_pin, OUTPUT);
+  pinMode(grooming_led_pin, OUTPUT);
 }
 
 //// TRIGGER FUNCTIONS ////
 // If the serial port is available:
 //    receive a signal from python
-//    if a 1 is sent, print in the monitor that rearing is happening!
-//    otherwise, print that the animal is not rearing and turn LED off
-void rearing_trigger() {
+//    if a 0 is sent, rearing is happening!
+//    if a 1 is sent, walking is happening!
+//    if a 2 is sent, sitting is happening!
+//    if a 3 is sent, grooming is happening!
+void behavior_trigger() {
   if (myTransfer.available())
   {
     myTransfer.rxObj(trigger_list);
-    if ((trigger_list[0]== 1) && (trigger_list[1] == 0)) {
-      // L Rearing!
-      digitalWrite(left_led_pin, HIGH);
-      digitalWrite(right_led_pin, LOW);
+    if (trigger_list[0] == 0) {
+      // Rearing!
+      digitalWrite(rearing_led_pin, HIGH);
+      digitalWrite(walking_led_pin, LOW);
+      digitalWrite(sitting_led_pin, LOW);
+      digitalWrite(grooming_led_pin, LOW);
     }
-    else if ((trigger_list[0] == 0) && (trigger_list[1] == 1)) {
-      // R Rearing!
-      digitalWrite(left_led_pin, LOW);
-      digitalWrite(right_led_pin, HIGH);
+    else if (trigger_list[0] == 1) {
+      // Walking!
+      digitalWrite(rearing_led_pin, LOW);
+      digitalWrite(walking_led_pin, HIGH);
+      
+      digitalWrite(sitting_led_pin, LOW);
+      digitalWrite(grooming_led_pin, LOW);
     }
-    else if ((trigger_list[0] == 1) && (trigger_list[1] == 1)) {
-      // Both Rearing!
-      digitalWrite(left_led_pin, HIGH);
-      digitalWrite(right_led_pin, HIGH);
+    else if (trigger_list[0] == 2) {
+      // Sitting!
+      digitalWrite(rearing_led_pin, LOW);
+      digitalWrite(walking_led_pin, LOW);
+      digitalWrite(sitting_led_pin, HIGH);
+      digitalWrite(grooming_led_pin, LOW);
     }
     else {
-      // "Neither Rearing!
-      digitalWrite(left_led_pin, LOW);
-      digitalWrite(right_led_pin, LOW);
+      // Grooming!
+      digitalWrite(rearing_led_pin, LOW);
+      digitalWrite(walking_led_pin, LOW);
+      digitalWrite(sitting_led_pin, LOW);
+      digitalWrite(grooming_led_pin, HIGH);
     }
   }
 }
 
 // loop
 void loop() {
-  rearing_trigger();
+  behavior_trigger();
 }
