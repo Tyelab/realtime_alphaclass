@@ -10,7 +10,7 @@ As of 4/30/21:
 
 ~~The code has yet to be tested in either language.~~
 
-Code is tested and functional for demonstration.
+Code is tested and functional for demonstration as of 5/5/21
 
 Standard computing environment for Anaconda should be made. Jeremy to export conda environment and upload here.
 
