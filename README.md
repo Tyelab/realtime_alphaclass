@@ -15,11 +15,16 @@ Code is tested and functional for demonstration as of 5/5/21
 
 Conda environment uploaded 5/5/21. Use `arduino_python.yml`.
 
-Code must be integrated with a script running real time AlphaTracker.
+~~Code must be integrated with a script running real time AlphaTracker.~~
+
+Aneesh has successfully integrated the script using real time classification as of 5/5/2021
+
 
 Control of a solenoid or other gating mechanism must be introduced to release reward.
 
 Control of optogenetics trigger must be introduced.
+This is to be done via MedPC scripting or, if required, C++ scripts that require us to purchase a software package from Med Associates.
+
 
 Update as of 5/5/21: This is not necessary for using the Arduino UNO. If we want more outputs, we might need an Arduino MEGA in which case buying one would be helpful. The're cheaply available on Amazon.
 
